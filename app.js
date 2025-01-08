@@ -2,9 +2,11 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const logger = require('./utils/logger');
+const cors = require('cors');
 const config = require('./config.json');
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'home.html'));
