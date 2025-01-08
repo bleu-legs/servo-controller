@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servo Control Interface</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .servo-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 20px;
+        }
+
+        .servo {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            width: 250px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .servo h2 {
+            margin: 0 0 10px;
+            font-size: 18px;
+            color: #555;
+        }
+
+        .servo input[type="range"],
+        .servo input[type="number"] {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .servo .degree {
+            font-size: 16px;
+            color: #333;
+            margin-top: 10px;
+        }
+
+        .servo button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            font-size: 14px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .servo button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Servo Control Interface</h1>
+    <div class="servo-container">
+        <!-- Servos will be added dynamically -->
+    </div>
+
+    <script>
+        const hostURL = "http://localhost:3000"
+
+        const servoContainer = document.querySelector('.servo-container');
+
+        for (let i = 1; i <= 16; i++) {
+            const servoDiv = document.createElement('div');
+            servoDiv.className = 'servo';
+            servoDiv.id = `servo-${i}`;
+            servoDiv.innerHTML = `
+                <h2>Servo ${i}</h2>
+                <input type="range" min="0" max="180" value="90" id="servo${i}-range">
+                <input type="number" min="0" max="180" value="90" id="servo${i}-input">
+                <div class="degree">Degree: <span id="servo${i}-degree">90</span>°</div>
+                <button id="servo${i}-apply">Apply</button>
+            `;
+
+            const rangeInput = servoDiv.querySelector(`#servo${i}-range`);
+            const numberInput = servoDiv.querySelector(`#servo${i}-input`);
+            const degreeSpan = servoDiv.querySelector(`#servo${i}-degree`);
+            const applyButton = servoDiv.querySelector(`#servo${i}-apply`);
+
+            // Sync range and number inputs
+            rangeInput.addEventListener('input', () => {
+                numberInput.value = rangeInput.value;
+                degreeSpan.textContent = rangeInput.value;
+            });
+
+            numberInput.addEventListener('input', () => {
+                rangeInput.value = numberInput.value;
+                degreeSpan.textContent = numberInput.value;
+            });
+
+            applyButton.addEventListener('click', () => {
+                const servoNumber = i;
+                const degreeValue = numberInput.value;
+                console.log(`Servo ${servoNumber} set to ${degreeValue}°`);
+
+                var url = hostURL + "/control?servo=" + servoNumber + "&degree=" + degreeValue
+
+                console.log(url)
+                
+                
+
+            // Make a GET request using fetch
+            fetch(url)
+                .then(response => response.json())  // Parse the JSON response
+                .then(data => {
+                    // Display the message from the response
+                })
+                .catch(error => {
+                    // Handle errors
+                    console.error('Error:', error);
+                
+                });
+            });
+
+            servoContainer.appendChild(servoDiv);
+        }
+    </script>
+</body>
+</html>
