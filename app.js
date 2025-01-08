@@ -9,11 +9,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'home.html'));
-});
-
-app.get('/servo', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'servo.html'));
+  res.sendFile(path.join(__dirname, 'public', 'servo.html'));
 });
 
 app.get('/control', (req, res) => {
