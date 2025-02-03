@@ -1,2 +1,5 @@
 node_modules/
 app.log
+venv/
+servo/dev-env
+servo/__pycache__
